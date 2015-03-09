@@ -1,0 +1,38 @@
+---
+driver:
+  name: vagrant
+  network:
+  - ["private_network", {ip: "192.168.33.250"}]
+
+provisioner:
+  name: chef_solo
+
+platforms:
+  - name: ubuntu-14.04
+    driver:
+      box: mj-ubuntu14
+      box_url: https://cloud-images.ubuntu.com/vagrant/trusty/current/trusty-server-cloudimg-amd64-vagrant-disk1.box
+
+suites:
+  - name: default
+    run_list:
+      - recipe[mj-apache2::default]
+      - recipe[mj-apache2::php5-fpm]
+    attributes:
+      mj-apache2:
+        hosts:
+          - cookbook: apache2
+            site_name: example
+            server_name: example.jp
+            server_alias:
+              - www.example.jp
+            docroot: /srv/www/example/htdocs
+            directory_index:
+              - index.php
+              - index.html
+              - index.htm
+            directory_options:
+              - -Indexes
+              - +FollowSymLinks
+            allow_override:
+              - All

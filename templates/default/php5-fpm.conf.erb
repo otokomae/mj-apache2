@@ -1,0 +1,11 @@
+Alias /fcgi-bin <%= node['apache']['dir'] %>/<%= node['mj-apache2']['fcgi_dir'] %>
+<Directory <%= node['apache']['dir'] %>/<%= node['mj-apache2']['fcgi_dir'] %>>
+    Options None
+    AllowOverride None
+    Require all granted
+</Directory>
+FastCGIExternalServer <%= node['apache']['dir'] %>/<%= node['mj-apache2']['fcgi_dir'] %>/php -host 127.0.0.1:9000
+Action application/x-httpd-php-fastcgi /<%= node['mj-apache2']['fcgi_dir'] %>/php
+<FilesMatch ".+\.php$">
+    SetHandler application/x-httpd-php-fastcgi
+</FilesMatch>
